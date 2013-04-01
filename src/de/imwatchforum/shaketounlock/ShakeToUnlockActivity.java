@@ -16,7 +16,7 @@ import com.imwatchforum.shaketounlock.R;
 public class ShakeToUnlockActivity extends Activity implements OnClickListener {
 
     private Button button;
-    private EditText edit;
+    private EditText timeEdit;
 
     
     @Override
@@ -24,8 +24,8 @@ public class ShakeToUnlockActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity);
-        
-        edit = (EditText) findViewById(R.id.s_edit);
+       
+        timeEdit = (EditText) findViewById(R.id.timeEdit);
         button = (Button) findViewById(R.id.on_off_button);
         button.setOnClickListener(this);
         
@@ -47,7 +47,7 @@ public class ShakeToUnlockActivity extends Activity implements OnClickListener {
 		
 		if(!isServiceRunning()) {
 			Bundle bundle = new Bundle();
-			int time = Integer.parseInt(edit.getText().toString());
+			int time = Integer.parseInt(timeEdit.getText().toString());
 			
 			if(time <= 0) {
 				time = 4;

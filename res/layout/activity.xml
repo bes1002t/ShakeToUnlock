@@ -18,7 +18,7 @@
         	android:text="@string/s_text"/>
         
         <EditText
-            android:id="@+id/s_edit"
+            android:id="@+id/timeEdit"
         	android:layout_width="fill_parent"
         	android:layout_height="fill_parent" 
         	android:inputType="number"/>
