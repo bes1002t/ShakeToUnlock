@@ -3,9 +3,12 @@ package de.imwatchforum.shaketounlock;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,6 +20,8 @@ public class ShakeToUnlockActivity extends Activity implements OnClickListener {
 
     private Button button;
     private EditText timeEdit;
+
+    private boolean mBound = false;
 
     
     @Override
@@ -45,7 +50,7 @@ public class ShakeToUnlockActivity extends Activity implements OnClickListener {
 	
 		Intent intent = new Intent(this, ShakeToUnlockService.class);
 		
-		if(!isServiceRunning()) {
+		if(!mBound && !isServiceRunning()) {
 			Bundle bundle = new Bundle();
 			int time = Integer.parseInt(timeEdit.getText().toString());
 			
@@ -59,8 +64,11 @@ public class ShakeToUnlockActivity extends Activity implements OnClickListener {
 		    
 			buttonText += "\n" + getResources().getString(R.string.button_on);
 		    startService(intent);
+		    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 		} else {
 		    buttonText += "\n" + getResources().getString(R.string.button_off);
+		    
+		    unbindService(mConnection);
 		    stopService(intent);
 		}
 		
@@ -79,4 +87,18 @@ public class ShakeToUnlockActivity extends Activity implements OnClickListener {
 		
 		return false;
     }
+    
+    
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
 }

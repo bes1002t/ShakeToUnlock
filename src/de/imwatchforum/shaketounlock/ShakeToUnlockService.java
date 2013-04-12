@@ -1,5 +1,7 @@
 package de.imwatchforum.shaketounlock;
 
+import it.imwatch.SensorService;
+import it.imwatch.SensorServiceInstance;
 import it.imwatch.SimpleShakeDetector;
 
 import java.util.Timer;
@@ -17,6 +19,7 @@ public class ShakeToUnlockService extends Service {
 	private PowerManager.WakeLock wl;
 
 	private SimpleShakeDetector mShakeDetector;
+	private SensorService mSensors;
 	private String TAG = "Shake";
 	private int time;
 
@@ -51,6 +54,8 @@ public class ShakeToUnlockService extends Service {
 			}
 
 		}, SimpleShakeDetector.DEFAULT_UPDATE_INTERVAL);
+		
+		mSensors = new SensorServiceInstance(100);
 	}
 
 
@@ -59,6 +64,7 @@ public class ShakeToUnlockService extends Service {
 		super.onDestroy();
 
 		mShakeDetector.onPause();
+		mSensors.onPause();
 	}
 
 
@@ -67,5 +73,6 @@ public class ShakeToUnlockService extends Service {
 		super.onStart(intent, startId);
 
 		mShakeDetector.onResume();
+		mSensors.onResume();
 	}
 }
